@@ -1,5 +1,3 @@
-// JavaScript to make the website more interactive
-
 document.addEventListener("DOMContentLoaded", () => {
     // Toggle navigation menu for mobile view
     const logo = document.querySelector('.logo');
@@ -73,8 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const observerOptions = {
         root: null,
-        rootMargin: "0px", // Changed from -50% to 0px
-        threshold: 0.5 // Changed to trigger when 50% of section is visible
+        rootMargin: "0px",
+        threshold: 0.5
     };
 
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -92,15 +90,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (entry.target.id === 'skills') {
                     animateSkillBars();
                 }
+
+                // Hide previous section and show current section
+                sections.forEach(section => {
+                    if (section !== entry.target) {
+                        section.style.opacity = '0';
+                        section.style.transform = 'translateY(50px)';
+                    }
+                });
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
         });
     }, observerOptions);
 
     // Set home as active on initial load
     window.addEventListener('load', () => {
-        // Remove any existing active classes
         navLinks.forEach(link => link.classList.remove('active'));
-        // Set home link as active
         const homeLink = document.querySelector('nav a[href="#home"]');
         if (homeLink) {
             homeLink.classList.add('active');
@@ -109,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sections.forEach(section => {
         sectionObserver.observe(section);
+        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        section.style.opacity = '0'; // Start hidden
     });
 
     // Skill Bars Animation
